@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- 控制台 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} : %msg %n</Pattern>   <!-- 输出格式 -->
+            <charset>UTF-8</charset> <!-- 解决中文乱码问题 -->
+        </encoder>
+    </appender>
+
+    <!-- 记录到文件 (每天一个文件) -->
+    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>logs/gateway-web.log</File>   <!-- 最新的log文件名 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>logs/gateway-web.%d{yyyy-MM-dd}.log</FileNamePattern>  <!-- 历史文件名 -->
+            <maxHistory>30</maxHistory> <!-- 保留 30 天的日志 -->
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} : %msg %n</Pattern>
+            <charset>UTF-8</charset>  <!--解决中文乱码问题-->
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="dailyRollingFileAppender" />
+    </root>
+
+    <logger name="net.xicp.chocolatedisco.gatewayweb">
+        <level value="DEBUG" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+</configuration>

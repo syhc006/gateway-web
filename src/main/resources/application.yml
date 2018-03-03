@@ -1,0 +1,23 @@
+server:
+  port: 10081
+spring:
+  application:
+    name: gateway
+  jpa:
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/chocolatedisco?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+eureka:
+  instance:
+      hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:10080/eureka/

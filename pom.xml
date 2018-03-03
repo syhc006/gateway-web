@@ -20,7 +20,27 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.M2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zuul</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -49,22 +69,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.thekraken</groupId>
-            <artifactId>grok</artifactId>
-            <version>0.1.5</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!--编译插件 可设置编码和编译级别-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -83,27 +93,27 @@
 
     <repositories>
         <repository>
-            <id>spring milestone</id>
-            <name>spring milestone</name>
-            <url>http://maven.springframework.org/milestone</url>
+            <id>spring</id>
+            <name>spring</name>
+            <url>http://maven.springframework.org/milestone/</url>
         </repository>
         <repository>
             <id>aliyun</id>
             <name>aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
-            <id>spring milestone</id>
-            <name>spring milestone</name>
-            <url>http://maven.springframework.org/milestone</url>
+            <id>spring</id>
+            <name>spring</name>
+            <url>http://maven.springframework.org/milestone/</url>
         </pluginRepository>
         <pluginRepository>
             <id>aliyun</id>
             <name>aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </pluginRepository>
     </pluginRepositories>
 
