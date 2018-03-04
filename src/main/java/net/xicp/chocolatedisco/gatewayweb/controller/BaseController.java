@@ -1,6 +1,8 @@
 package net.xicp.chocolatedisco.gatewayweb.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import net.xicp.chocolatedisco.gatewayweb.exception.ErrorAuthenticationException;
+import net.xicp.chocolatedisco.gatewayweb.exception.ErrorAuthorityException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -20,24 +22,31 @@ import java.util.Set;
 @Slf4j
 @RestControllerAdvice(annotations = RestController.class)
 public class BaseController {
-    protected void copyNonNullProperties(Object src, Object target, String... ignoreProperties) {
-        BeanWrapper srcBean = new BeanWrapperImpl(src);
-        PropertyDescriptor[] pds = srcBean.getPropertyDescriptors();
-        Set<String> emptyName = new HashSet<>();
-        for (String ip : ignoreProperties) {
-            emptyName.add(ip);
-        }
-        for (PropertyDescriptor p : pds) {
-            if (emptyName.contains(p.getName()) == false) {
-                Object srcValue = srcBean.getPropertyValue(p.getName());
-                if (srcValue == null) {
-                    emptyName.add(p.getName());
-                }
-            }
-        }
 
-        String[] result = new String[emptyName.size()];
-        BeanUtils.copyProperties(src, target, emptyName.toArray(result));
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    private Map runtimeExceptionHandler(ErrorAuthenticationException e) {
+        log.error(e.getMessage(), e);
+        Map result = new HashMap<>();
+        result.put("timestamp", Instant.now().getEpochSecond());
+        result.put("status", HttpStatus.UNAUTHORIZED.value());
+        result.put("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        result.put("message", e.getMessage());
+        result.put("exception_class", e.getClass().getCanonicalName());
+        return result;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    private Map runtimeExceptionHandler(ErrorAuthorityException e) {
+        log.error(e.getMessage(), e);
+        Map result = new HashMap<>();
+        result.put("timestamp", Instant.now().getEpochSecond());
+        result.put("status", HttpStatus.FORBIDDEN.value());
+        result.put("error", HttpStatus.FORBIDDEN.getReasonPhrase());
+        result.put("message", e.getMessage());
+        result.put("exception_class", e.getClass().getCanonicalName());
+        return result;
     }
 
     @ExceptionHandler
@@ -52,4 +61,5 @@ public class BaseController {
         result.put("exception_class", e.getClass().getCanonicalName());
         return result;
     }
+
 }

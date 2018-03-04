@@ -26,9 +26,4 @@
         <appender-ref ref="dailyRollingFileAppender" />
     </root>
 
-    <logger name="net.xicp.chocolatedisco.gatewayweb">
-        <level value="DEBUG" />
-        <appender-ref ref="CONSOLE" />
-    </logger>
-
 </configuration>
