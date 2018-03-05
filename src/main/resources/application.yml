@@ -5,10 +5,13 @@ spring:
     name: gateway
 eureka:
   instance:
-      hostname: localhost
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    status-page-url-path: /application/info
+    health-check-url-path: /application/health
   client:
     service-url:
-      defaultZone: http://localhost:10080/eureka/
+      defaultZone: http://127.0.0.1:10080/eureka/
 endpoints:
   health:
     id: health
@@ -26,12 +29,15 @@ info:
   app:
     name: API网关
     version: 1.0
+zuul:
+  host:
+    connect-timeout-millis: 60000
 jwt:
   token:
     secret: d3Rvd25hcGk=
     expiration: 1800000
     issuer: chocolatedisco
 gateway:
-  host: localhost
+  ip-address: 127.0.0.1
   token-uri: /gateway/token
   token-header: Authentication

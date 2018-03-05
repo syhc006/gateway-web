@@ -27,7 +27,7 @@ import java.util.Optional;
 public class AuthenticationFilter extends ZuulFilter {
     @Autowired
     private SimpleRouteLocator simpleRouteLocator;
-    @Value("${gateway.host}")
+    @Value("${gateway.ip-address}")
     private String gatewayHost;
     @Value("${gateway.token-uri}")
     private String tokenUri;
@@ -72,8 +72,17 @@ public class AuthenticationFilter extends ZuulFilter {
         log.debug("request.getRequestURL: " + request.getRequestURL());
         log.debug("actualPath: " + actualPath);
         log.debug("targetLocation: " + targetLocation);
-        String token = request.getHeader(tokenHeader);
-        boolean authenticationError = Optional.ofNullable(token).map(t -> t.trim().equals("")).orElse(true);
+        boolean authenticationError = Optional.ofNullable(request.getHeader(tokenHeader))
+                .map(token -> {
+                    boolean error = false;
+                    try {
+                        Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                        error = true;
+                    }
+                    return error;
+                }).orElse(true);
         if (authenticationError == true) {
             requestContext.setSendZuulResponse(false);
             requestContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
