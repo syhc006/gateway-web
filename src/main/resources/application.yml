@@ -14,3 +14,8 @@ jwt:
     secret: d3Rvd25hcGk=
     expiration: 1800000
     issuer: chocolatedisco
+gateway:
+  host: localhost
+  token-uri: /gateway/token
+  token-header: Authentication
+
