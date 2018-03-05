@@ -9,6 +9,23 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:10080/eureka/
+endpoints:
+  health:
+    id: health
+    sensitive: false
+    enabled: true
+  mappings:
+    id: mappings
+    sensitive: false
+    enabled: true
+  info:
+    id: info
+    sensitive: false
+    enabled: true
+info:
+  app:
+    name: API网关
+    version: 1.0
 jwt:
   token:
     secret: d3Rvd25hcGk=
@@ -18,4 +35,3 @@ gateway:
   host: localhost
   token-uri: /gateway/token
   token-header: Authentication
-
