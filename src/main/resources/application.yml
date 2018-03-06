@@ -3,6 +3,18 @@ server:
 spring:
   application:
     name: gateway
+  jpa:
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/chocolatedisco?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
 eureka:
   instance:
     prefer-ip-address: true
@@ -38,6 +50,6 @@ jwt:
     expiration: 1800000
     issuer: chocolatedisco
 gateway:
-  ip-address: 127.0.0.1
+  ip-address: 192.168.32.100
   token-uri: /gateway/token
   token-header: Authentication
