@@ -65,13 +65,6 @@ public class AuthenticationFilter extends ZuulFilter {
     public Object run() {
         RequestContext requestContext = getCurrentContext();
         HttpServletRequest request = requestContext.getRequest();
-        String actualPath = getUri(request.getRequestURI());
-        String targetLocation = getTargetLocation(request.getRequestURI());
-        log.debug("request.getRequestURI: " + request.getRequestURI());
-        log.debug("request.getServletPath: " + request.getServletPath());
-        log.debug("request.getRequestURL: " + request.getRequestURL());
-        log.debug("actualPath: " + actualPath);
-        log.debug("targetLocation: " + targetLocation);
         boolean authenticationError = Optional.ofNullable(request.getHeader(tokenHeader))
                 .map(token -> {
                     boolean error = false;
@@ -122,15 +115,12 @@ public class AuthenticationFilter extends ZuulFilter {
 
     private boolean validResources(HttpServletRequest request) {
         List<String> resources = getResourceFromToken(request.getHeader("Authentication"));
-        String target = request.getRequestURI().replace("/" + getTargetLocation(request.getRequestURI()), "");
+        String targetUri = getUri(request.getRequestURI());
         String requestMethod = request.getMethod();
-        for (String resource : resources) {
+        return resources.stream().anyMatch(resource -> {
             resource = resource.replace(requestMethod + "|", "");
-            if (antPathMatcher.match(resource, target)) {
-                return true;
-            }
-        }
-        return false;
+            return antPathMatcher.match(resource, targetUri);
+        });
     }
 
     private List<String> getResourceFromToken(String token) {
