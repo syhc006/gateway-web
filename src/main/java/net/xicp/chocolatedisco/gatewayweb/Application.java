@@ -3,6 +3,7 @@ package net.xicp.chocolatedisco.gatewayweb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableJpaRepositories
+@ServletComponentScan
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
