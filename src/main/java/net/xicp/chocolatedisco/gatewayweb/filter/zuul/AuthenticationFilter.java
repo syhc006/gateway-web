@@ -1,4 +1,4 @@
-package net.xicp.chocolatedisco.gatewayweb.filter;
+package net.xicp.chocolatedisco.gatewayweb.filter.zuul;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
