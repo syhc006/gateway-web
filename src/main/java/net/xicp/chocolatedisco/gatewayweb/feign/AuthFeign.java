@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "auth")
 public interface AuthFeign {
-    @RequestMapping(value = "/auth/sysUsers/findByAccount", method = RequestMethod.GET)
+    @RequestMapping(value = "/sysUsers/findByAccount", method = RequestMethod.GET)
     SysUser findByAccount(@RequestParam("account") String account);
 }
