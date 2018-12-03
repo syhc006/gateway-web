@@ -19,8 +19,8 @@ eureka:
   instance:
     prefer-ip-address: true
     ip-address: @eureka.instance.ip-address@
-    status-page-url-path: /application/info
-    health-check-url-path: /application/health
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
   client:
     service-url:
       defaultZone: @eureka.client.service-url.defaultZone@
