@@ -6,9 +6,12 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.SimpleRouteLocator;
 import org.springframework.http.HttpStatus;
@@ -16,7 +19,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +40,8 @@ public class AuthenticationFilter extends ZuulFilter {
     private String tokenHeader;
     @Value("${jwt.token.secret}")
     private String secret;
+    @Autowired
+    private Ignore ignore;
 
     @Autowired
     private AntPathMatcher antPathMatcher;
@@ -53,9 +60,15 @@ public class AuthenticationFilter extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext requestContext = getCurrentContext();
         HttpServletRequest request = requestContext.getRequest();
+        String requestMethod = request.getMethod();
         String actualPath = getUri(request.getRequestURI());
         String targetLocation = getTargetLocation(request.getRequestURI());
         if (targetLocation.equals(gatewayHost) && actualPath.equals(tokenUri)) {
+            return false;
+        } else if (ignore.getIgnores().stream().anyMatch(i -> {
+            i = i.replace(requestMethod + "|", "");
+            return antPathMatcher.match(i, actualPath);
+        })) {
             return false;
         }
         return true;
@@ -131,6 +144,14 @@ public class AuthenticationFilter extends ZuulFilter {
                 .getBody();
         resources = JSONArray.parseArray((String) claims.get("resources"), String.class);
         return resources;
+    }
+
+    @Component
+    @ConfigurationProperties(prefix = "gateway")
+    @Getter
+    @Setter
+    public static class Ignore {
+        List<String> ignores = new ArrayList<>();
     }
 
 }

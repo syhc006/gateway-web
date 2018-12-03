@@ -40,3 +40,4 @@ gateway:
   ip-address: @eureka.instance.ip-address@
   token-uri: /gateway/token
   token-header: Authentication
+  ignores:
